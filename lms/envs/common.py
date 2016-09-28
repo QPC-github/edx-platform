@@ -356,12 +356,6 @@ FEATURES = {
     # lives in the Extended table, saving the frontend from
     # making multiple queries.
     'ENABLE_READING_FROM_MULTIPLE_HISTORY_TABLES': True,
-
-    # Temporary feature flag for disabling saving of subsection grades.
-    # There is also an advanced setting in the course module.  The
-    # feature flag and the advanced setting must both be true for
-    # a course to use saved grades.
-    'ENABLE_SUBSECTION_GRADES_SAVED': False,
 }
 
 # Ignore static asset files on import which match this pattern
@@ -1278,7 +1272,6 @@ base_application_js = [
     'js/src/utility.js',
     'js/src/logger.js',
     'js/my_courses_dropdown.js',
-    'js/dialog_tab_controls.js',
     'js/src/string_utils.js',
     'js/form.ext.js',
     'js/src/ie_shim.js',
@@ -1695,7 +1688,6 @@ REQUIRE_JS_PATH_OVERRIDES = {
     'js/bookmarks/views/bookmark_button': 'js/bookmarks/views/bookmark_button.js',
     'js/views/message_banner': 'js/views/message_banner.js',
     'moment': 'js/vendor/moment-with-locales.min.js',
-    'jquery.url': 'js/vendor/url.min.js',
     'js/courseware/course_home_events': 'js/courseware/course_home_events.js',
     'js/courseware/accordion_events': 'js/courseware/accordion_events.js',
     'js/courseware/link_clicked_events': 'js/courseware/link_clicked_events.js',
@@ -1918,7 +1910,7 @@ INSTALLED_APPS = (
     'openedx.core.djangoapps.course_groups',
     'bulk_email',
     'branding',
-    'lms.djangoapps.grades',
+    'lms.djangoapps.grades.apps.GradesConfig',
 
     # Student support tools
     'support',
@@ -2039,7 +2031,8 @@ INSTALLED_APPS = (
 
     # Course data caching
     'openedx.core.djangoapps.content.course_overviews',
-    'openedx.core.djangoapps.content.course_structures',
+    'openedx.core.djangoapps.content.course_structures.apps.CourseStructuresConfig',
+    'openedx.core.djangoapps.content.block_structure.apps.BlockStructureConfig',
     'lms.djangoapps.course_blocks',
 
     # Old course structure API
@@ -2955,6 +2948,9 @@ SITE_ID = 1
 
 # dir containing all themes
 COMPREHENSIVE_THEME_DIRS = [REPO_ROOT / "themes"]
+
+# Theme directory locale paths
+COMPREHENSIVE_THEME_LOCALE_PATHS = []
 
 # Theme to use when no site or site theme is defined,
 # set to None if you want to use openedx theme

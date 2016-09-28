@@ -126,11 +126,8 @@ class StudentAccountUpdateTest(CacheIsolationTestCase, UrlResetMixin):
         self.assertTrue(result)
 
         # Try reusing the activation link to change the password again
-        response = self.client.post(
-            activation_link,
-            {'new_password1': self.OLD_PASSWORD, 'new_password2': self.OLD_PASSWORD},
-            follow=True
-        )
+        # Visit the activation link again.
+        response = self.client.get(activation_link)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "This password reset link is invalid. It may have been used already.")
 
@@ -237,9 +234,10 @@ class StudentAccountLoginAndRegistrationTest(ThirdPartyAuthTestMixin, UrlResetMi
         super(StudentAccountLoginAndRegistrationTest, self).setUp()
 
         # For these tests, three third party auth providers are enabled by default:
-        self.configure_google_provider(enabled=True)
-        self.configure_facebook_provider(enabled=True)
+        self.configure_google_provider(enabled=True, visible=True)
+        self.configure_facebook_provider(enabled=True, visible=True)
         self.configure_dummy_provider(
+            visible=True,
             enabled=True,
             icon_class='',
             icon_image=SimpleUploadedFile('icon.svg', '<svg><rect width="50" height="100"/></svg>'),
@@ -482,8 +480,8 @@ class AccountSettingsViewTest(ThirdPartyAuthTestMixin, TestCase, ProgramsApiConf
         self.request.user = self.user
 
         # For these tests, two third party auth providers are enabled by default:
-        self.configure_google_provider(enabled=True)
-        self.configure_facebook_provider(enabled=True)
+        self.configure_google_provider(enabled=True, visible=True)
+        self.configure_facebook_provider(enabled=True, visible=True)
 
         # Python-social saves auth failure notifcations in Django messages.
         # See pipeline.get_duplicate_provider() for details.

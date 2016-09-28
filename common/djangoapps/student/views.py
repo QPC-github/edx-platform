@@ -2242,6 +2242,13 @@ def password_reset_confirm_wrapper(request, uidb36=None, token=None):
             request, uidb64=uidb64, token=token, extra_context=platform_name
         )
 
+        # If password reset was unsuccessful a template response is returned (status_code 200).
+        # Check if form is invalid then show an error to the user.
+        # Note if password reset was successful we get response redirect (status_code 302).
+        if response.status_code == 200 and not response.context_data['form'].is_valid():
+            response.context_data['err_msg'] = _('Error in resetting your password. Please try again.')
+            return response
+
         # get the updated user
         updated_user = User.objects.get(id=uid_int)
 
@@ -2280,16 +2287,15 @@ def reactivation_email_for_user(user):
     subject = render_to_string('emails/activation_email_subject.txt', context)
     subject = ''.join(subject.splitlines())
     message = render_to_string('emails/activation_email.txt', context)
+    from_address = configuration_helpers.get_value('email_from_address', settings.DEFAULT_FROM_EMAIL)
 
     try:
-        user.email_user(subject, message, configuration_helpers.get_value(
-            'email_from_address',
-            settings.DEFAULT_FROM_EMAIL,
-        ))
+        user.email_user(subject, message, from_address)
     except Exception:  # pylint: disable=broad-except
         log.error(
-            u'Unable to send reactivation email from "%s"',
-            configuration_helpers.get_value('email_from_address', settings.DEFAULT_FROM_EMAIL),
+            u'Unable to send reactivation email from "%s" to "%s"',
+            from_address,
+            user.email,
             exc_info=True
         )
         return JsonResponse({
