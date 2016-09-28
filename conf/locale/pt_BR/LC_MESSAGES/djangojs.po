@@ -96,7 +96,7 @@
 # LucasPPires <lucaspylespires@hotmail.com>, 2014
 # Luiz Penedo <inactive+luiz.penedo@transifex.com>, 2015
 # Marco Túlio Pires <mtrpires@outlook.com>, 2014
-# Mike Job Silva <mikejobrn@gmail.com>, 2015
+# Mike Job <mikejobrn@gmail.com>, 2015
 # Monica Farias <monifar.tp@gmail.com>, 2015-2016
 # Ned Batchelder <ned@edx.org>, 2016
 # niels006 <niels006@gmail.com>, 2014
@@ -110,6 +110,7 @@
 # Siderlan Santos <siderlan.santos@gmail.com>, 2015
 # Thiago Perrotta <inactive+thiagowfx@transifex.com>, 2014
 # Victor Hochgreb de Freitas <victorhochgreb@gmail.com>, 2015
+# Vinicius Ferreira de Souza <vinicius.fk9@gmail.com>, 2016
 # William Bellinazo Roca <williambr_1331@hotmail.com>, 2016
 # #-#-#-#-#  underscore.po (edx-platform)  #-#-#-#-#
 # edX translation file
@@ -144,7 +145,7 @@
 # Drew Melim <nokostya.translation@gmail.com>, 2015
 # Sergio Silva <sergiohrs@gmail.com>, 2016
 # sgtmarciosilva <sgtmarciosilva@ibest.com.br>, 2015
-# Thiago Barroso Perrotta, 2016
+# Thiago Perrotta, 2016
 # Thiago Perrotta <inactive+thiagowfx@transifex.com>, 2014
 # Victor Hochgreb <victorfeec@gmail.com>, 2015
 # Victor Hochgreb de Freitas <victorhochgreb@gmail.com>, 2015
@@ -172,7 +173,7 @@
 # Mariana Jó de Souza <mariana.jsouza@gmail.com>, 2015
 # mmauryx <matheus_w_dias@hotmail.com>, 2014
 # Maurício Gonçalves Melara Camargo <mauriciogmc@gmail.com>, 2015
-# Mike Job Silva <mikejobrn@gmail.com>, 2015
+# Mike Job <mikejobrn@gmail.com>, 2015
 # Monica Farias <monifar.tp@gmail.com>, 2015-2016
 # Renata Barboza-Murray, 2015
 # Ricardo Pietrobon <pietr007@gmail.com>, 2014
@@ -184,8 +185,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: edx-platform\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2016-08-25 15:04+0000\n"
-"PO-Revision-Date: 2016-08-16 19:42+0000\n"
+"POT-Creation-Date: 2016-09-15 13:39+0000\n"
+"PO-Revision-Date: 2016-09-15 13:50+0000\n"
 "Last-Translator: Ned Batchelder <ned@edx.org>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/open-edx/edx-platform/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -1597,14 +1598,9 @@ msgstr ""
 "A URL que você inseriu parece ser um link externo. Deseja adicionar o "
 "prefixo obrigatório http://?"
 
-#. #-#-#-#-#  djangojs-partial.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
-#: cms/templates/js/course-instructor-details.underscore
-#: cms/templates/js/signatory-details.underscore
-#: common/static/common/templates/discussion/new-post.underscore
-#: common/static/common/templates/discussion/thread-edit.underscore
 msgid "Title"
 msgstr "Título"
 
@@ -2070,7 +2066,6 @@ msgstr ""
 "copiado qualquer trabalho não salvo e, em seguida, recarregue a página."
 
 #: common/static/coffee/src/discussion/utils.js
-#: common/static/common/js/discussion/utils.js
 msgid "We had some trouble processing your request. Please try again."
 msgstr ""
 "Houve algum problema ao processar a sua solicitação. Por favor, tente "
@@ -6191,6 +6186,12 @@ msgstr "Anterior"
 msgid "Status"
 msgstr "Status"
 
+#: cms/templates/js/publish-history.underscore
+#: cms/templates/js/staff-lock-editor.underscore
+#: common/static/common/templates/discussion/new-post-alert.underscore
+msgid "message"
+msgstr ""
+
 #: common/static/common/templates/image-modal.underscore
 msgid "Large"
 msgstr "Grande"
@@ -6330,6 +6331,10 @@ msgstr "Retirar"
 msgid "Vote for this post,"
 msgstr "Vote nesta publicação,"
 
+#: common/static/common/templates/discussion/new-post-alert.underscore
+msgid "Error posting your message."
+msgstr ""
+
 #: common/static/common/templates/discussion/new-post.underscore
 msgid "Visible To:"
 msgstr "Visível para:"
@@ -6348,17 +6353,19 @@ msgstr ""
 "grupo."
 
 #: common/static/common/templates/discussion/new-post.underscore
+#: common/static/common/templates/discussion/thread-edit.underscore
 msgid "Title:"
 msgstr "Título:"
 
 #: common/static/common/templates/discussion/new-post.underscore
+#: common/static/common/templates/discussion/thread-edit.underscore
 msgid "Add a clear and descriptive title to encourage participation."
 msgstr ""
 "Adicionar um título claro e descritivo para incentivar a participação."
 
 #: common/static/common/templates/discussion/new-post.underscore
-msgid "Enter your question or comment"
-msgstr "Insira sua pergunta ou comentário"
+msgid "Enter your question or comment."
+msgstr ""
 
 #: common/static/common/templates/discussion/new-post.underscore
 msgid "follow this post"
@@ -6414,8 +6421,8 @@ msgid "Editing post"
 msgstr "Editando publicação"
 
 #: common/static/common/templates/discussion/thread-edit.underscore
-msgid "Edit post title"
-msgstr "Editar título da publicação"
+msgid "Edit your post below."
+msgstr ""
 
 #: common/static/common/templates/discussion/thread-edit.underscore
 msgid "Update post"
@@ -9291,11 +9298,6 @@ msgid "Last published %(last_published_date)s by %(publish_username)s"
 msgstr ""
 "Publicado pela última vez em %(last_published_date)s por "
 "%(publish_username)s"
-
-#: cms/templates/js/publish-history.underscore
-#: cms/templates/js/staff-lock-editor.underscore
-msgid "message"
-msgstr "mensagem"
 
 #: cms/templates/js/publish-history.underscore
 #: cms/templates/js/publish-xblock.underscore

@@ -25,6 +25,7 @@ from courseware.models import StudentModule, BaseStudentModuleHistory
 from courseware.tests.helpers import LoginEnrollmentTestCase
 from lms.djangoapps.lms_xblock.runtime import quote_slashes
 from student.models import anonymous_id_for_user, CourseEnrollment
+from submissions import api as submissions_api
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory, ItemFactory
 from xmodule.partitions.partitions import Group, UserPartition
@@ -143,9 +144,22 @@ class TestSubmittingProblems(ModuleStoreTestCase, LoginEnrollmentTestCase, Probl
         self.student_user = User.objects.get(email=self.student)
         self.factory = RequestFactory()
         # Disable the score change signal to prevent other components from being pulled into tests.
-        signal_patch = patch('courseware.module_render.SCORE_CHANGED.send')
-        signal_patch.start()
-        self.addCleanup(signal_patch.stop)
+        self.score_changed_signal_patch = patch('courseware.module_render.SCORE_CHANGED.send')
+        self.score_changed_signal_patch.start()
+
+    def tearDown(self):
+        super(TestSubmittingProblems, self).tearDown()
+        self._stop_signal_patch()
+
+    def _stop_signal_patch(self):
+        """
+        Stops the signal patch for the SCORE_CHANGED event.
+        In case a test wants to test with the event actually
+        firing.
+        """
+        if self.score_changed_signal_patch:
+            self.score_changed_signal_patch.stop()
+            self.score_changed_signal_patch = None
 
     def add_dropdown_to_section(self, section_location, name, num_inputs=2):
         """
@@ -340,7 +354,21 @@ class TestCourseGrader(TestSubmittingProblems):
         self.add_dropdown_to_section(self.homework.location, 'p3', 1)
         self.refresh_course()
 
-    def weighted_setup(self):
+    def weighted_setup(self, hw_weight=0.25, final_weight=0.75):
+        """
+        Set up a simple course for testing weighted grading functionality.
+        """
+        # pylint: disable=attribute-defined-outside-init
+
+        self.set_weighted_policy(hw_weight, final_weight)
+
+        # set up a structure of 1 homework and 1 final
+        self.homework = self.add_graded_section_to_course('homework')
+        self.problem = self.add_dropdown_to_section(self.homework.location, 'H1P1')
+        self.final = self.add_graded_section_to_course('Final Section', 'Final')
+        self.final_question = self.add_dropdown_to_section(self.final.location, 'FinalQuestion')
+
+    def set_weighted_policy(self, hw_weight=0.25, final_weight=0.75):
         """
         Set up a simple course for testing weighted grading functionality.
         """
@@ -352,22 +380,16 @@ class TestCourseGrader(TestSubmittingProblems):
                     "min_count": 1,
                     "drop_count": 0,
                     "short_label": "HW",
-                    "weight": 0.25
+                    "weight": hw_weight
                 }, {
                     "type": "Final",
                     "name": "Final Section",
                     "short_label": "Final",
-                    "weight": 0.75
+                    "weight": final_weight
                 }
             ]
         }
         self.add_grading_policy(grading_policy)
-
-        # set up a structure of 1 homework and 1 final
-        self.homework = self.add_graded_section_to_course('homework')
-        self.problem = self.add_dropdown_to_section(self.homework.location, 'H1P1')
-        self.final = self.add_graded_section_to_course('Final Section', 'Final')
-        self.final_question = self.add_dropdown_to_section(self.final.location, 'FinalQuestion')
 
     def dropping_setup(self):
         """
@@ -540,14 +562,20 @@ class TestCourseGrader(TestSubmittingProblems):
         self.check_grade_percent(0.67)
         self.assertEqual(self.get_grade_summary()['grade'], 'B')
 
-        # But now we mock out a get_scores call, and watch as it overrides the
-        # score read from StudentModule and our student gets an A instead.
-        with patch('submissions.api.get_scores') as mock_get_scores:
-            mock_get_scores.return_value = {
-                self.problem_location('p3').to_deprecated_string(): (1, 1)
-            }
-            self.check_grade_percent(1.0)
-            self.assertEqual(self.get_grade_summary()['grade'], 'A')
+        # But now, set the score with the submissions API and watch
+        # as it overrides the score read from StudentModule and our
+        # student gets an A instead.
+        self._stop_signal_patch()
+        student_item = {
+            'student_id': anonymous_id_for_user(self.student_user, self.course.id),
+            'course_id': unicode(self.course.id),
+            'item_id': unicode(self.problem_location('p3')),
+            'item_type': 'problem'
+        }
+        submission = submissions_api.create_submission(student_item, 'any answer')
+        submissions_api.set_score(submission['uuid'], 1, 1)
+        self.check_grade_percent(1.0)
+        self.assertEqual(self.get_grade_summary()['grade'], 'A')
 
     def test_submissions_api_anonymous_student_id(self):
         """
@@ -598,6 +626,17 @@ class TestCourseGrader(TestSubmittingProblems):
         self.submit_question_answer('H1P1', {'2_1': 'Correct', '2_2': 'Correct'})
         self.submit_question_answer('FinalQuestion', {'2_1': 'Correct', '2_2': 'Correct'})
         self.check_grade_percent(1.0)
+
+    def test_grade_updates_on_weighted_change(self):
+        """
+        Test that the course grade updates when the
+        assignment weights change.
+        """
+        self.weighted_setup()
+        self.submit_question_answer('H1P1', {'2_1': 'Correct', '2_2': 'Correct'})
+        self.check_grade_percent(0.25)
+        self.set_weighted_policy(0.75, 0.25)
+        self.check_grade_percent(0.75)
 
     def dropping_homework_stage1(self):
         """

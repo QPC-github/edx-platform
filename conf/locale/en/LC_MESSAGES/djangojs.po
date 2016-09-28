@@ -26,8 +26,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1a\n"
 "Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2016-09-01 11:12+0000\n"
-"PO-Revision-Date: 2016-09-01 11:13:42.908257\n"
+"POT-Creation-Date: 2016-09-22 14:30+0000\n"
+"PO-Revision-Date: 2016-09-22 14:31:51.058301\n"
 "Last-Translator: \n"
 "Language-Team: openedx-translation <openedx-translation@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1436,8 +1436,6 @@ msgstr ""
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: cms/templates/js/course-instructor-details.underscore
 #: cms/templates/js/signatory-details.underscore
-#: common/static/common/templates/discussion/new-post.underscore
-#: common/static/common/templates/discussion/thread-edit.underscore
 msgid "Title"
 msgstr ""
 
@@ -1880,14 +1878,12 @@ msgid ""
 msgstr ""
 
 #: common/static/coffee/src/discussion/utils.js
-#: common/static/common/js/discussion/utils.js
 msgid "We had some trouble processing your request. Please try again."
 msgstr ""
 
 #: common/static/coffee/src/discussion/utils.js
 #: common/static/coffee/src/discussion/views/discussion_thread_list_view.js
 #: common/static/common/js/discussion/utils.js
-#: common/static/common/js/discussion/views/discussion_topic_menu_view.js
 #: common/static/common/templates/discussion/pagination.underscore
 msgid "…"
 msgstr ""
@@ -5743,6 +5739,12 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+#: cms/templates/js/publish-history.underscore
+#: cms/templates/js/staff-lock-editor.underscore
+#: common/static/common/templates/discussion/new-post-alert.underscore
+msgid "message"
+msgstr ""
+
 #: common/static/common/templates/image-modal.underscore
 msgid "Large"
 msgstr ""
@@ -5880,6 +5882,10 @@ msgstr ""
 msgid "Vote for this post,"
 msgstr ""
 
+#: common/static/common/templates/discussion/new-post-alert.underscore
+msgid "Error posting your message."
+msgstr ""
+
 #: common/static/common/templates/discussion/new-post.underscore
 msgid "Visible To:"
 msgstr ""
@@ -5895,15 +5901,17 @@ msgid ""
 msgstr ""
 
 #: common/static/common/templates/discussion/new-post.underscore
+#: common/static/common/templates/discussion/thread-edit.underscore
 msgid "Title:"
 msgstr ""
 
 #: common/static/common/templates/discussion/new-post.underscore
+#: common/static/common/templates/discussion/thread-edit.underscore
 msgid "Add a clear and descriptive title to encourage participation."
 msgstr ""
 
 #: common/static/common/templates/discussion/new-post.underscore
-msgid "Enter your question or comment"
+msgid "Enter your question or comment."
 msgstr ""
 
 #: common/static/common/templates/discussion/new-post.underscore
@@ -5960,7 +5968,7 @@ msgid "Editing post"
 msgstr ""
 
 #: common/static/common/templates/discussion/thread-edit.underscore
-msgid "Edit post title"
+msgid "Edit your post below."
 msgstr ""
 
 #: common/static/common/templates/discussion/thread-edit.underscore
@@ -6117,14 +6125,6 @@ msgstr ""
 
 #: common/static/common/templates/discussion/topic.underscore
 msgid "Topic Area:"
-msgstr ""
-
-#: common/static/common/templates/discussion/topic.underscore
-msgid "Discussion topics; currently listing: "
-msgstr ""
-
-#: common/static/common/templates/discussion/topic.underscore
-msgid "Filter topics"
 msgstr ""
 
 #: common/static/common/templates/discussion/topic.underscore
@@ -8646,6 +8646,10 @@ msgstr ""
 msgid "Clear Value"
 msgstr ""
 
+#: cms/templates/js/metadata-editor.underscore
+msgid "Component Location ID"
+msgstr ""
+
 #: cms/templates/js/metadata-file-uploader-item.underscore
 #: cms/templates/js/video/metadata-translations-item.underscore
 msgid "Download"
@@ -8683,11 +8687,6 @@ msgstr ""
 #: cms/templates/js/publish-xblock.underscore
 #, python-format
 msgid "Last published %(last_published_date)s by %(publish_username)s"
-msgstr ""
-
-#: cms/templates/js/publish-history.underscore
-#: cms/templates/js/staff-lock-editor.underscore
-msgid "message"
 msgstr ""
 
 #: cms/templates/js/publish-history.underscore
